@@ -10,10 +10,11 @@ namespace GameLibrary
     {
         private GameInterface handler;
         Player activePlayer;
-        public static Player inactivePlayer;
-        char[,] board = new char[3, 3];
+        public Player inactivePlayer;
+        char[,] board;
         Player[] players;
-        char[] PlayerPlacements = new char[10];
+        public char[] PlayerPlacements;
+        public bool IsTesting { get; set; }
         public Class1()
         {
             players = new Player[2];
@@ -24,19 +25,21 @@ namespace GameLibrary
             players[1] = new Player() { Name = "Player 2: Xenon", Token = 'O' };
         }
 
-
+        
         /// <summary>
         /// The Tic Tac Toe game loop, 2 players.  Iterate player turns until the game
         /// is over
         /// </summary>
         public void Start()
         {
+            PlayerPlacements = handler.PlayerPlacements();
+            board = handler.board();
             int indexOfCurrentPlayer = 0;
             int indexOfInactivePlayer = 1;
             activePlayer = players[indexOfCurrentPlayer];
             inactivePlayer = players[indexOfInactivePlayer];
-
-            while (!GameOver(handler))
+            //SetEventHandler(handler);
+            while (!GameOver(handler) && !IsTesting)
             {
                 Console.WriteLine("Here is the board:");
                 PrintBoard();
@@ -51,8 +54,10 @@ namespace GameLibrary
                 //Added this slight delay for user experience.  Without it it's harder to notice the board repaint
                 //try commenting it out and check out the difference.  Which do you prefer?
                 System.Threading.Thread.Sleep(300);
-
-                Console.Clear();
+                if (!Console.IsOutputRedirected)
+                {
+                    Console.Clear();
+                }
             }
         }
 
@@ -83,8 +88,15 @@ namespace GameLibrary
             Console.Write("Enter the number: ");
 
             //todo: Prevent returning a location that's already been used
-
-            return ConvertToArrayLocation(Console.ReadLine());
+            String Input = Console.ReadLine();
+            if (Input != null)
+            {
+                return ConvertToArrayLocation(Input);
+            }
+            else
+            {
+                return ConvertToArrayLocation("1");
+            }
         }
 
 
@@ -96,7 +108,8 @@ namespace GameLibrary
         /// <returns>The X,Y position intended to be used with a 2D array</returns>
         public int[] ConvertToArrayLocation(string boardPosition)
         {
-            int position = Int32.Parse(boardPosition);
+            int position = Int32.Parse(ChangeIfLetter(boardPosition));
+            position = ChangeIfTooHigh(position);
             char ActiveToken = activePlayer.Token;
             PlayerPlacements[position] = ActiveToken;
             position--; //reduce position to account for 1-based board map (done for user experience)
@@ -104,7 +117,25 @@ namespace GameLibrary
             int column = position % 3;
             return new int[] { row, column }; //inline array initialization
         }
-
+        public string ChangeIfLetter(string boardPosition)
+        {
+            int n;
+            if (!int.TryParse(boardPosition, out n))
+            {
+                boardPosition = "1";
+                return boardPosition;
+            }
+            return boardPosition;
+        }
+        public int ChangeIfTooHigh(int position)
+        {
+            if (position > 9)
+            {
+                position = 9;
+                return position;
+            }
+            return position;
+        }
         /// <summary>
         /// Prints a number for every position on the board to help the user
         /// know what single number to enter
@@ -158,9 +189,9 @@ namespace GameLibrary
         /// <returns></returns>
         private bool GameOver(GameInterface gi)
         {
-            if (gi != null)
+            if (handler != null)
             {
-                if (gi.WinConditions())
+                if (handler.WinConditions())
                 {
                     return true;
                 }

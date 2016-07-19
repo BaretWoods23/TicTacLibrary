@@ -55,8 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\A5GameLibrary\TicTacToe.csproj">
-      <Project>{BDA56671-7903-4776-994D-C18FF6BF3567}</Project>
+      <Project>{bda56671-7903-4776-994d-c18ff6bf3567}</Project>
       <Name>TicTacToe</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameLibrary\GameLibrary.csproj">
+      <Project>{747b816d-f79a-47f0-97f9-5470f2a9a80d}</Project>
+      <Name>GameLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

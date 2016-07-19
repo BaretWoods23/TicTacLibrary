@@ -15,22 +15,26 @@ namespace TicTacToe.Tests
         public void ConvertToArrayLocationTestLow()
         {
             TicTac t = new TicTac();
+            t.e.IsTesting = true;
+            t.Start();
             int[] expected = new int[] { 0, 1 };
 
-   //         int[] actual = t.ConvertToArrayLocation("2");
+            int[] actual = t.e.ConvertToArrayLocation("2");
 
-   //         CollectionAssert.AreEqual(expected, actual);
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         [TestMethod()]
         public void ConvertToArrayLocationTestHigh()
         {
             TicTac t = new TicTac();
+            t.e.IsTesting = true;
+            t.Start();
             int[] expected = new int[] { 2, 2 };
 
-    //        int[] actual = t.ConvertToArrayLocation("9");
+            int[] actual = t.e.ConvertToArrayLocation("9");
 
-     //       CollectionAssert.AreEqual(expected, actual);
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -38,11 +42,12 @@ namespace TicTacToe.Tests
         {
             //This test is here to show you invalid input is not handled
             TicTac t = new TicTac();
-            int[] expected = new int[] { 2, 2 };
+            t.e.IsTesting = true;
+            t.Start();
+            int[] expected = new int[] { 0, 0 };
 
-     //       int[] actual = t.ConvertToArrayLocation("a");
-
-     //       CollectionAssert.AreEqual(expected, actual);
+            int[] actual = t.e.ConvertToArrayLocation("a");
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -50,11 +55,13 @@ namespace TicTacToe.Tests
         {
             //What should happen when the user enters an invalid number (out of bounds of the map)?
             TicTac t = new TicTac();
+            t.e.IsTesting = true;
+            t.Start();
             int[] expected = new int[] { 2, 2 };
 
-      //      int[] actual = t.ConvertToArrayLocation("15");
+            int[] actual = t.e.ConvertToArrayLocation("15");
 
-      //      CollectionAssert.AreEqual(expected, actual);
+            CollectionAssert.AreEqual(expected, actual);
         }
     }
 }
